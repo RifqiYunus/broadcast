@@ -107,4 +107,30 @@ public class ContactServiceTest {
         assertEquals(1, numberList.size());
         assertEquals(recipientNumber1, numberList.get(0));
     }
+
+    @Test
+    void saveBroadcastNumberShouldSaveNewObjectToDatabase() {
+        BroadcastNumber broadcastNumber1 = BroadcastNumber.builder()
+                                            .userName("NOC SBU")
+                                            .waNumber("081231231232")
+                                            .build();
+        
+        contactService.saveBroadcastNumber(broadcastNumber1);
+        
+        List<BroadcastNumber> savedBroadcastNumber = broadcastNumberRepository.findAll();
+        assertEquals(1, savedBroadcastNumber.size());
+    }
+
+    @Test
+    void saveRecipientNumberShouldSaveNewObjectToDatabase() {
+        RecipientNumber recipientNumber = RecipientNumber.builder()
+                                            .userName("NOC SBU")
+                                            .waNumber("081231231232")
+                                            .build();
+        
+        contactService.saveRecipientNumber(recipientNumber);
+        
+        List<RecipientNumber> savedRecipientNumbers = recipientNumberRepository.findAll();
+        assertEquals(1, savedRecipientNumbers.size());
+    }
 }

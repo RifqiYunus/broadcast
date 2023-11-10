@@ -35,4 +35,12 @@ public class ContactService {
     public List<RecipientNumber> getByRecipientName(String name){
         return recipientNumberRepository.findByUserName(name);
     }
+
+    public BroadcastNumber saveBroadcastNumber(BroadcastNumber broadcastNumber) {
+        return broadcastNumberRepository.save(broadcastNumber);
+    }
+
+    public RecipientNumber saveRecipientNumber(RecipientNumber recipientNumber) {
+        return recipientNumberRepository.save(recipientNumber);
+    }
 }
