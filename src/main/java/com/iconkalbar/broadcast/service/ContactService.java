@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.RecipientNumber;
+import com.iconkalbar.broadcast.model.request.NewContactRequest;
 import com.iconkalbar.broadcast.repository.BroadcastNumberRepository;
 import com.iconkalbar.broadcast.repository.RecipientNumberRepository;
 
@@ -36,11 +37,21 @@ public class ContactService {
         return recipientNumberRepository.findByUserName(name);
     }
 
-    public BroadcastNumber saveBroadcastNumber(BroadcastNumber broadcastNumber) {
-        return broadcastNumberRepository.save(broadcastNumber);
+    public NewContactRequest saveBroadcastNumber(NewContactRequest contactRequest) {
+        BroadcastNumber broadcastNumber = BroadcastNumber.builder()
+                                            .userName(contactRequest.getUserName())
+                                            .waNumber(contactRequest.getContactNumber())
+                                            .build();
+        BroadcastNumber savedNumber = broadcastNumberRepository.save(broadcastNumber);
+        return new NewContactRequest(savedNumber.getUserName(), savedNumber.getWaNumber());
     }
 
-    public RecipientNumber saveRecipientNumber(RecipientNumber recipientNumber) {
-        return recipientNumberRepository.save(recipientNumber);
+    public NewContactRequest saveRecipientNumber(NewContactRequest contactRequest) {
+        RecipientNumber recipientNumber = RecipientNumber.builder()
+                                            .userName(contactRequest.getUserName())
+                                            .waNumber(contactRequest.getContactNumber())
+                                            .build();
+        RecipientNumber savedNumber = recipientNumberRepository.save(recipientNumber);
+        return new NewContactRequest(savedNumber.getUserName(), savedNumber.getWaNumber());
     }
 }

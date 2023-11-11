@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.RecipientNumber;
+import com.iconkalbar.broadcast.model.request.NewContactRequest;
 import com.iconkalbar.broadcast.repository.BroadcastNumberRepository;
 import com.iconkalbar.broadcast.repository.RecipientNumberRepository;
 
@@ -33,7 +34,7 @@ public class ContactServiceTest {
     }
 
     @Test
-    void getAllBroadcastNumberShouldCallBroadcastRepositoryFindAll() {
+    void getAllBroadcastNumber_shouldCallBroadcastRepositoryFindAll() {
 
         BroadcastNumber broadcastNumber1 = BroadcastNumber.builder()
                                             .userName("NOC SBU")
@@ -52,7 +53,7 @@ public class ContactServiceTest {
     }
 
     @Test
-    void getBroadcastNumberBySenderNameShouldRetrieveOneContact() {
+    void getBroadcastNumberBySenderName_shouldRetrieveOneContact() {
 
         BroadcastNumber broadcastNumber1 = BroadcastNumber.builder()
                                             .userName("NOC SBU")
@@ -72,7 +73,7 @@ public class ContactServiceTest {
     }    
 
     @Test
-    void getAllRecipientNumberShouldCallRecipientRepositoryFindAll() {
+    void getAllRecipientNumber_shouldCallRecipientRepositoryFindAll() {
         RecipientNumber recipientNumber1 = RecipientNumber.builder()
                                             .userName("Serpo Pontianak")
                                             .waNumber("081231231232")
@@ -90,7 +91,7 @@ public class ContactServiceTest {
     }
 
     @Test
-    void getRecipientNumberByRecipientNumberShouldRetrieveOneContact() {
+    void getRecipientNumberByRecipientNumber_shouldRetrieveOneContact() {
         RecipientNumber recipientNumber1 = RecipientNumber.builder()
                                             .userName("Serpo Pontianak")
                                             .waNumber("081231231232")
@@ -109,10 +110,10 @@ public class ContactServiceTest {
     }
 
     @Test
-    void saveBroadcastNumberShouldSaveNewObjectToDatabase() {
-        BroadcastNumber broadcastNumber1 = BroadcastNumber.builder()
+    void saveBroadcastNumber_shouldSaveNewObjectToDatabase() {
+        NewContactRequest broadcastNumber1 = NewContactRequest.builder()
                                             .userName("NOC SBU")
-                                            .waNumber("081231231232")
+                                            .contactNumber("081231231232")
                                             .build();
         
         contactService.saveBroadcastNumber(broadcastNumber1);
@@ -122,10 +123,10 @@ public class ContactServiceTest {
     }
 
     @Test
-    void saveRecipientNumberShouldSaveNewObjectToDatabase() {
-        RecipientNumber recipientNumber = RecipientNumber.builder()
+    void saveRecipientNumber_shouldSaveNewObjectToDatabase() {
+        NewContactRequest recipientNumber = NewContactRequest.builder()
                                             .userName("NOC SBU")
-                                            .waNumber("081231231232")
+                                            .contactNumber("081231231232")
                                             .build();
         
         contactService.saveRecipientNumber(recipientNumber);
