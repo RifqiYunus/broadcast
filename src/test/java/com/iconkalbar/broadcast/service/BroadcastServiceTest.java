@@ -64,6 +64,7 @@ public class BroadcastServiceTest {
         ResponseEntity<String> response = broadcastService.blastMessage(pmSchedule, broadcastNumber);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        Mockito.verify(restTemplate).postForEntity(eq(Constants.BLAST_URI), any(), eq(String.class));
     }
 
     private ResponseEntity<String> generateResponseEntityObject(String response, HttpStatus httpStatus){
