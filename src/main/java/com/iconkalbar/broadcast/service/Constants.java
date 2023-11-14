@@ -6,4 +6,5 @@ public class Constants {
 
     public static final String BLAST_URI = "https://wa.srv19.wapanels.com/send-message";
 
+    public static String dateFormat = "dd-MM-yyyy";
 }
