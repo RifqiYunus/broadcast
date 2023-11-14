@@ -17,9 +17,13 @@ public class PmScheduleService {
     private PmScheduleRepository pmScheduleRepository;
 
     List<PmSchedule> fetchAllScheduleThisWeek(Date scheduledDate) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_MONTH,5);
-            Date endOfWeek = cal.getTime();
-            return pmScheduleRepository.findByScheduledDateBeforeAndIsMaintenanceDone(endOfWeek, false);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH,5);
+        Date endOfWeek = cal.getTime();
+        return pmScheduleRepository.findByScheduledDateBeforeAndIsMaintenanceDone(endOfWeek, false);
+    }
+
+    PmSchedule saveOrUpdatePmSchedule(PmSchedule pmSchedule) {
+        return pmScheduleRepository.save(pmSchedule);
     }
 }

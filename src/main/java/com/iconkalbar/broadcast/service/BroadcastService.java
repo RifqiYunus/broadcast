@@ -2,6 +2,7 @@ package com.iconkalbar.broadcast.service;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,17 @@ import com.iconkalbar.broadcast.model.request.BroadcastRequest;
 @Service
 public class BroadcastService {
 
-    public BroadcastService(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public BroadcastService(RestTemplate restTemplate, ObjectMapper objectMapper, PmScheduleService pmScheduleService) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        this.pmScheduleService = pmScheduleService;
     }
 
     private RestTemplate restTemplate;
 
     private ObjectMapper objectMapper;
+
+    private PmScheduleService pmScheduleService;
 
     public ResponseEntity<String> blastMessage(PmSchedule pmSchedule, BroadcastNumber broadcastNumber) throws RestClientException, JsonProcessingException {
         BroadcastRequest broadcastRequest = BroadcastRequest.builder()
@@ -36,6 +40,10 @@ public class BroadcastService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> requestEntity = new HttpEntity<String>(objectMapper.writeValueAsString(broadcastRequest), headers);
         ResponseEntity<String> bResponseEntity = restTemplate.postForEntity(Constants.BLAST_URI, requestEntity, String.class);
+        if(bResponseEntity.getStatusCode()==HttpStatus.OK){
+            pmSchedule.setReminderSentTimes(pmSchedule.getReminderSentTimes() + 1);
+            pmScheduleService.saveOrUpdatePmSchedule(pmSchedule);
+        }
         return bResponseEntity;
     }
 }

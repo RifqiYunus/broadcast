@@ -38,6 +38,8 @@ public class PmSchedule {
 
     private boolean isMaintenanceDone;
 
+    private int reminderSentTimes;
+
     @UpdateTimestamp
     private Date updatedDate;
 
