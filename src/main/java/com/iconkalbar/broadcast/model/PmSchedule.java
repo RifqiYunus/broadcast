@@ -36,7 +36,7 @@ public class PmSchedule {
 
     private Date realizationDate;
 
-    private boolean isReminderSent;
+    private boolean isMaintenanceDone;
 
     @UpdateTimestamp
     private Date updatedDate;
