@@ -25,8 +25,6 @@ import com.iconkalbar.broadcast.TestConstant;
 import com.iconkalbar.broadcast.factory.ModelFactory;
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.PmSchedule;
-import com.iconkalbar.broadcast.model.RecipientNumber;
-import com.iconkalbar.broadcast.model.SitePOP;
 import com.iconkalbar.broadcast.repository.PmScheduleRepository;
 
 @SpringBootTest
