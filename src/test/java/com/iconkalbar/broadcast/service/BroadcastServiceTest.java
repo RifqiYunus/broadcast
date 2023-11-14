@@ -20,6 +20,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.iconkalbar.broadcast.TestConstant;
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.RecipientNumber;
@@ -35,7 +36,7 @@ public class BroadcastServiceTest {
     @Autowired
     private BroadcastService broadcastService;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat formatter = new SimpleDateFormat(TestConstant.dateFormat);
 
     @Test
     void blastMessage_shouldHitRestApiWithCorrectPayload() throws ParseException, RestClientException, JsonProcessingException {
@@ -51,7 +52,7 @@ public class BroadcastServiceTest {
         PmSchedule pmSchedule = PmSchedule.builder()
                                 .recipient(recipientNumber1)
                                 .sitePop(sitePOP)
-                                .isReminderSent(false)
+                                .isMaintenanceDone(false)
                                 .scheduledDate(formatter.parse("12-11-2023"))
                                 .build();
         BroadcastNumber broadcastNumber = BroadcastNumber.builder()
