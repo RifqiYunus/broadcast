@@ -15,11 +15,11 @@ public class SitePoPService {
     private SitePOPRepository sitePOPRepository;
 
 
-    SitePOP saveOrUpdateSitePOP(SitePOP sitePOP) {
+    public SitePOP saveOrUpdateSitePOP(SitePOP sitePOP) {
         return sitePOPRepository.save(sitePOP);
     }
 
-    List<SitePOP> fetchByPopId(String popId) {
+    public List<SitePOP> fetchByPopId(String popId) {
         return sitePOPRepository.findByPopId(popId);
     }
 }

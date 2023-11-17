@@ -22,6 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.TestConstant;
 import com.iconkalbar.broadcast.factory.ModelFactory;
 import com.iconkalbar.broadcast.model.PmSchedule;
+import com.iconkalbar.broadcast.model.RecipientNumber;
+import com.iconkalbar.broadcast.model.SitePOP;
+import com.iconkalbar.broadcast.model.request.NewPmScheduleRequest;
 
 @SpringBootTest
 public class PmScheduleServiceTest {
@@ -85,5 +88,36 @@ public class PmScheduleServiceTest {
         ResponseEntity<String> response = pmScheduleService.updateRealizationDate("Wrong POP Id", PoP1DateString, realizationDateString);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void updateRealizationDate_shouldThrowResourceNotFoundException_whenOmScheduleNotFound() throws ParseException, JsonProcessingException {
+        String PoP1DateString = "06-11-2023";
+        String wrongRequestDate = "08-11-2023";
+        String realizationDateString = "10-11-2023";
+        Date PoP1Date = sdformat.parse(PoP1DateString);
+        PmSchedule pmSchedule = modelFactory.generatePmSchedule(true, PoP1Date, null);
+
+        ResponseEntity<String> response = pmScheduleService.updateRealizationDate(pmSchedule.getSitePop().getPopId(), wrongRequestDate, realizationDateString);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void addNewSchedule_shouldAddNewEntryInDB() throws JsonProcessingException, ParseException {
+        RecipientNumber recipientNumber = modelFactory.generateRecipientNumber();
+        SitePOP sitePOP = modelFactory.generateSitePOP();
+        String scheduledDate = "12-11-2023";
+        NewPmScheduleRequest newPmScheduleRequest = NewPmScheduleRequest.builder()
+                                                    .popId(sitePOP.getPopId())
+                                                    .recipientName(recipientNumber.getUserName())
+                                                    .scheduledDate(scheduledDate)
+                                                    .build();
+
+        ResponseEntity<String> responseEntity = pmScheduleService.addNewSchedule(newPmScheduleRequest);
+        NewPmScheduleRequest responseBody = objectMapper.readValue(responseEntity.getBody(), NewPmScheduleRequest.class);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertTrue(responseBody.getId()!=0);
     }
 }

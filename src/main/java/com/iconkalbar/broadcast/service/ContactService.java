@@ -43,7 +43,7 @@ public class ContactService {
                                             .waNumber(contactRequest.getContactNumber())
                                             .build();
         BroadcastNumber savedNumber = broadcastNumberRepository.save(broadcastNumber);
-        return new NewContactRequest(savedNumber.getUserName(), savedNumber.getWaNumber());
+        return new NewContactRequest(savedNumber.getId() ,savedNumber.getUserName(), savedNumber.getWaNumber(), "Sender");
     }
 
     public NewContactRequest saveRecipientNumber(NewContactRequest contactRequest) {
@@ -52,6 +52,6 @@ public class ContactService {
                                             .waNumber(contactRequest.getContactNumber())
                                             .build();
         RecipientNumber savedNumber = recipientNumberRepository.save(recipientNumber);
-        return new NewContactRequest(savedNumber.getUserName(), savedNumber.getWaNumber());
+        return new NewContactRequest(savedNumber.getId() ,savedNumber.getUserName(), savedNumber.getWaNumber(), "Recipient");
     }
 }

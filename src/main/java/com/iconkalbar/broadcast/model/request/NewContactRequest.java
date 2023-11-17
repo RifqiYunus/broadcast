@@ -9,8 +9,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class NewContactRequest {
     
+    private int id;
+
     private String userName;
 
     private String contactNumber;
+
+    private String contactType;
 
 }
