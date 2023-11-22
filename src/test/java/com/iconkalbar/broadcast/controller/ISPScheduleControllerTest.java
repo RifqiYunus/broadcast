@@ -53,7 +53,7 @@ public class ISPScheduleControllerTest {
     }
 
     @Test
-    void testFetchUnfinishedSchedule() throws Exception {
+    void fetchUnfinishedSchedule_shouldGetAllIncompleteSchedule() throws Exception {
         Date PoP1Date = sdformat.parse("06-11-2023");
         Date PoP2Date = sdformat.parse("08-11-2023");
         Date PoP3Date = sdformat.parse("10-11-2023");
@@ -72,7 +72,7 @@ public class ISPScheduleControllerTest {
     }
 
     @Test
-    void testPostNewSchedule() throws Exception {
+    void postNewSchedule_shouldAddNewScheduleToDb() throws Exception {
         RecipientNumber recipientNumber = modelFactory.generateRecipientNumber();
         SitePOP sitePOP = modelFactory.generateSitePOP();
         String scheduledDate = "12-11-2023";
@@ -88,5 +88,26 @@ public class ISPScheduleControllerTest {
         List<PmSchedule> savedSchedule = pmScheduleRepository.findAll();
         assertEquals(1, savedSchedule.size());
         assertEquals(newPmScheduleRequest.getRecipientName(), savedSchedule.get(0).getRecipient().getUserName());
+    }
+
+    @Test
+    void updateRealizationDate_shouldUpdateRealizationDateinPmField() throws Exception {
+        Date PoP2Date = sdformat.parse("08-11-2023");
+        String scheduleDate = "08-11-2023";
+        String realization = "10-11-2023";
+        PmSchedule schedule = modelFactory.generatePmSchedule(false, PoP2Date, null);
+        PmScheduleRequest updatePmScheduleRequest = PmScheduleRequest.builder()
+                                                    .popId(schedule.getSitePop().getPopId())
+                                                    .scheduledDate(scheduleDate)
+                                                    .realizationDate(realization)
+                                                    .build();
+        String jsonRequest = objectMapper.writeValueAsString(updatePmScheduleRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/pm-isp/schedules").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
+        List<PmSchedule> savedSchedule = pmScheduleRepository.findAll();
+
+        assertEquals(1, savedSchedule.size());
+        assertEquals(realization, sdformat.format(savedSchedule.get(0).getRealizationDate()));
+        assertTrue(savedSchedule.get(0).isMaintenanceDone());
     }
 }
