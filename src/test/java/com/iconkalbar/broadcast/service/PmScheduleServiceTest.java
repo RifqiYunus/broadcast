@@ -24,7 +24,7 @@ import com.iconkalbar.broadcast.factory.ModelFactory;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.RecipientNumber;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.NewPmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
 
 @SpringBootTest
 public class PmScheduleServiceTest {
@@ -69,8 +69,13 @@ public class PmScheduleServiceTest {
         String realizationDateString = "10-11-2023";
         Date PoP1Date = sdformat.parse(PoP1DateString);
         PmSchedule schedule1 = modelFactory.generatePmSchedule(true, PoP1Date, null);
+        PmScheduleRequest request = PmScheduleRequest.builder()
+                                    .popId(schedule1.getSitePop().getPopId())
+                                    .scheduledDate(PoP1DateString)
+                                    .realizationDate(realizationDateString)
+                                    .build();
 
-        ResponseEntity<String> updatedDataResponse = pmScheduleService.updateRealizationDate(schedule1.getSitePop().getPopId(), PoP1DateString, realizationDateString);
+        ResponseEntity<String> updatedDataResponse = pmScheduleService.updateRealizationDate(request);
         PmSchedule updatedData = objectMapper.readValue(updatedDataResponse.getBody(), PmSchedule.class);
 
         Date updatedRealizationDate = updatedData.getRealizationDate();
@@ -84,8 +89,13 @@ public class PmScheduleServiceTest {
         String realizationDateString = "10-11-2023";
         Date PoP1Date = sdformat.parse(PoP1DateString);
         modelFactory.generatePmSchedule(true, PoP1Date, null);
+        PmScheduleRequest request = PmScheduleRequest.builder()
+                                    .popId("Wrong POP Id")
+                                    .scheduledDate(PoP1DateString)
+                                    .realizationDate(realizationDateString)
+                                    .build();
 
-        ResponseEntity<String> response = pmScheduleService.updateRealizationDate("Wrong POP Id", PoP1DateString, realizationDateString);
+        ResponseEntity<String> response = pmScheduleService.updateRealizationDate(request);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
@@ -97,8 +107,13 @@ public class PmScheduleServiceTest {
         String realizationDateString = "10-11-2023";
         Date PoP1Date = sdformat.parse(PoP1DateString);
         PmSchedule pmSchedule = modelFactory.generatePmSchedule(true, PoP1Date, null);
+        PmScheduleRequest request = PmScheduleRequest.builder()
+                                    .popId(pmSchedule.getSitePop().getPopId())
+                                    .scheduledDate(wrongRequestDate)
+                                    .realizationDate(realizationDateString)
+                                    .build();
 
-        ResponseEntity<String> response = pmScheduleService.updateRealizationDate(pmSchedule.getSitePop().getPopId(), wrongRequestDate, realizationDateString);
+        ResponseEntity<String> response = pmScheduleService.updateRealizationDate(request);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
@@ -108,14 +123,14 @@ public class PmScheduleServiceTest {
         RecipientNumber recipientNumber = modelFactory.generateRecipientNumber();
         SitePOP sitePOP = modelFactory.generateSitePOP();
         String scheduledDate = "12-11-2023";
-        NewPmScheduleRequest newPmScheduleRequest = NewPmScheduleRequest.builder()
+        PmScheduleRequest newPmScheduleRequest = PmScheduleRequest.builder()
                                                     .popId(sitePOP.getPopId())
                                                     .recipientName(recipientNumber.getUserName())
                                                     .scheduledDate(scheduledDate)
                                                     .build();
 
         ResponseEntity<String> responseEntity = pmScheduleService.addNewSchedule(newPmScheduleRequest);
-        NewPmScheduleRequest responseBody = objectMapper.readValue(responseEntity.getBody(), NewPmScheduleRequest.class);
+        PmScheduleRequest responseBody = objectMapper.readValue(responseEntity.getBody(), PmScheduleRequest.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertTrue(responseBody.getId()!=0);

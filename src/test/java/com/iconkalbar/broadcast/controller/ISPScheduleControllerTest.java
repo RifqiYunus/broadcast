@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,11 +23,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.TestConstant;
 import com.iconkalbar.broadcast.factory.ModelFactory;
-import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.RecipientNumber;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.NewPmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
 import com.iconkalbar.broadcast.repository.PmScheduleRepository;
 
 @SpringBootTest
@@ -78,7 +76,7 @@ public class ISPScheduleControllerTest {
         RecipientNumber recipientNumber = modelFactory.generateRecipientNumber();
         SitePOP sitePOP = modelFactory.generateSitePOP();
         String scheduledDate = "12-11-2023";
-        NewPmScheduleRequest newPmScheduleRequest = NewPmScheduleRequest.builder()
+        PmScheduleRequest newPmScheduleRequest = PmScheduleRequest.builder()
                                                     .popId(sitePOP.getPopId())
                                                     .recipientName(recipientNumber.getUserName())
                                                     .scheduledDate(scheduledDate)

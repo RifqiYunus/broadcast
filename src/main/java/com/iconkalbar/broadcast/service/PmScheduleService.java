@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.RecipientNumber;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.NewPmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
 import com.iconkalbar.broadcast.repository.PmScheduleRepository;
 
 @Service
@@ -49,30 +49,32 @@ public class PmScheduleService {
         return pmScheduleRepository.save(pmSchedule);
     }
 
-    public ResponseEntity<String> updateRealizationDate(String popId, String scheduledDate, String realizationDate) throws ParseException, JsonProcessingException {
+    public ResponseEntity<String> updateRealizationDate(PmScheduleRequest pmScheduleRequest) throws ParseException, JsonProcessingException {
         SitePOP sitePOP;
         PmSchedule pmSchedule;
         
         try {
-            sitePOP = sitePoPService.fetchByPopId(popId).get(0);
+            sitePOP = sitePoPService.fetchByPopId(pmScheduleRequest.getPopId()).get(0);
         } catch (Exception e) {
-            return new ResponseEntity<>("POP with ID " + popId + " not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("POP with ID " + pmScheduleRequest.getPopId() + " not found", HttpStatus.NOT_FOUND);
         }
         
         try {
-            pmSchedule = pmScheduleRepository.findBySitePopAndScheduledDate(sitePOP, sdFormat.parse(scheduledDate)).get(0);
+            pmSchedule = pmScheduleRepository.findBySitePopAndScheduledDate(sitePOP, sdFormat.parse(pmScheduleRequest.getScheduledDate())).get(0);
         } catch (Exception e) {
             return new ResponseEntity<>("Schedule not found", HttpStatus.NOT_FOUND);
         }
         
-        pmSchedule.setRealizationDate(sdFormat.parse(realizationDate));
+        pmSchedule.setRealizationDate(sdFormat.parse(pmScheduleRequest.getRealizationDate()));
         pmSchedule.setMaintenanceDone(true);
         PmSchedule updatedSchedule = pmScheduleRepository.save(pmSchedule);
+        pmScheduleRequest.setMaintenanceDone(pmSchedule.isMaintenanceDone());
+        pmScheduleRequest.setId(pmSchedule.getId());
         
         return new ResponseEntity<>(objectMapper.writeValueAsString(updatedSchedule), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> addNewSchedule(NewPmScheduleRequest newPmScheduleRequest) throws ParseException, JsonProcessingException {
+    public ResponseEntity<String> addNewSchedule(PmScheduleRequest newPmScheduleRequest) throws ParseException, JsonProcessingException {
         SitePOP sitePOP;
         RecipientNumber recipientNumber;
         

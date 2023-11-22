@@ -1,7 +1,5 @@
 package com.iconkalbar.broadcast.model.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class NewPmScheduleRequest {
+public class PmScheduleRequest {
 
     private int id;
     
@@ -19,4 +17,7 @@ public class NewPmScheduleRequest {
 
     private String recipientName;
         
+    private String realizationDate;
+
+    private boolean isMaintenanceDone; 
 }

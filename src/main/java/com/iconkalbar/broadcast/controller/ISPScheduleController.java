@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.NewPmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
 import com.iconkalbar.broadcast.service.PmScheduleService;
 import com.iconkalbar.broadcast.service.SitePoPService;
 
@@ -35,8 +36,13 @@ public class ISPScheduleController {
     }
 
     @PostMapping("/schedules")
-    ResponseEntity<String> postNewSchedule(@RequestBody NewPmScheduleRequest request) throws JsonProcessingException, ParseException {
+    ResponseEntity<String> postNewSchedule(@RequestBody PmScheduleRequest request) throws JsonProcessingException, ParseException {
         return pmScheduleService.addNewSchedule(request);
+    }
+
+    @PutMapping("/schedules")
+    ResponseEntity<String> updateRealizationDate(@RequestBody PmScheduleRequest request) throws JsonProcessingException, ParseException {
+        return pmScheduleService.updateRealizationDate(request);
     }
 
 }
