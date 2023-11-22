@@ -36,8 +36,10 @@ public class PmScheduleService {
 
     private SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.dateFormat);
 
-    public List<PmSchedule> fetchAllScheduleThisWeek(Date scheduledDate) {
+    public List<PmSchedule> fetchAllScheduleThisWeek(String dateString) throws ParseException {
+        Date scheduleDate = sdFormat.parse(dateString);
         Calendar cal = Calendar.getInstance();
+        cal.setTime(scheduleDate);
         cal.add(Calendar.DAY_OF_MONTH,5);
         Date endOfWeek = cal.getTime();
         return pmScheduleRepository.findByScheduledDateBeforeAndIsMaintenanceDone(endOfWeek, false);

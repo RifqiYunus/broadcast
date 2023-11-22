@@ -50,7 +50,7 @@ public class PmScheduleServiceTest {
         Date PoP1Date = sdformat.parse("06-11-2023");
         Date PoP2Date = sdformat.parse("08-11-2023");
         Date PoP3Date = sdformat.parse("10-11-2023");
-        Date broadcastDate = sdformat.parse("06-11-2023");
+        String broadcastDate = "06-11-2023";
         PmSchedule schedule1 = modelFactory.generatePmSchedule(true, PoP1Date, null);
         PmSchedule schedule2 = modelFactory.generatePmSchedule(false, PoP2Date, null);
         PmSchedule schedule3 = modelFactory.generatePmSchedule(false, PoP3Date, null);
