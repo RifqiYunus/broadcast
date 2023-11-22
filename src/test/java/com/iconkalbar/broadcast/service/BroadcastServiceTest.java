@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
@@ -42,6 +43,11 @@ public class BroadcastServiceTest {
 
     @Autowired
     private ModelFactory modelFactory;
+
+    @AfterEach
+    void cleanUp() {
+        modelFactory.purgeAllData();
+    }
 
     SimpleDateFormat formatter = new SimpleDateFormat(TestConstant.dateFormat);
 
