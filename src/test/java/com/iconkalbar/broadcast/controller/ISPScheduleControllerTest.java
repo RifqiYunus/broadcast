@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.TestConstant;
@@ -28,6 +29,7 @@ import com.iconkalbar.broadcast.model.RecipientNumber;
 import com.iconkalbar.broadcast.model.SitePOP;
 import com.iconkalbar.broadcast.model.request.PmScheduleRequestDTO;
 import com.iconkalbar.broadcast.repository.PmScheduleRepository;
+import com.iconkalbar.broadcast.repository.SitePOPRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,6 +46,9 @@ public class ISPScheduleControllerTest {
 
     @Autowired
     private PmScheduleRepository pmScheduleRepository;
+
+    @Autowired
+    private SitePOPRepository sitePOPRepository;
 
     private SimpleDateFormat sdformat = new SimpleDateFormat(TestConstant.dateFormat);
 
@@ -109,5 +114,21 @@ public class ISPScheduleControllerTest {
         assertEquals(1, savedSchedule.size());
         assertEquals(realization, sdformat.format(savedSchedule.get(0).getRealizationDate()));
         assertTrue(savedSchedule.get(0).isMaintenanceDone());
+    }
+
+    @Test
+    void postNewSite_shouldAddNewPoPSiteInDB() throws Exception {
+        SitePOP newSite = SitePOP.builder()
+                            .name("Pikitring")
+                            .type("shelter")
+                            .popId("PTK001")
+                            .build();
+        String jsonRequest = objectMapper.writeValueAsString(newSite);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/pm-isp/sites").content(jsonRequest).contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
+        
+        List<SitePOP> savedSites = sitePOPRepository.findAll();
+        assertEquals(1, savedSites.size());
+        assertEquals(newSite.getName(), savedSites.get(0).getName());
     }
 }
