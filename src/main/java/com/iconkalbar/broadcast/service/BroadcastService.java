@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.PmSchedule;
-import com.iconkalbar.broadcast.model.request.BroadcastRequest;
+import com.iconkalbar.broadcast.model.request.BroadcastRequestDTO;
 
 @Service
 public class BroadcastService {
@@ -31,7 +31,7 @@ public class BroadcastService {
     private PmScheduleService pmScheduleService;
 
     public ResponseEntity<String> blastMessage(PmSchedule pmSchedule, BroadcastNumber broadcastNumber) throws RestClientException, JsonProcessingException {
-        BroadcastRequest broadcastRequest = BroadcastRequest.builder()
+        BroadcastRequestDTO broadcastRequest = BroadcastRequestDTO.builder()
                                             .apiKey(Constants.API_KEY)
                                             .sender(broadcastNumber.getWaNumber())
                                             .number(pmSchedule.getRecipient().getWaNumber())

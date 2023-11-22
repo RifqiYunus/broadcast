@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.RecipientNumber;
-import com.iconkalbar.broadcast.model.request.NewContactRequest;
+import com.iconkalbar.broadcast.model.request.ContactRequestDTO;
 import com.iconkalbar.broadcast.repository.BroadcastNumberRepository;
 import com.iconkalbar.broadcast.repository.RecipientNumberRepository;
 
@@ -111,7 +111,7 @@ public class ContactServiceTest {
 
     @Test
     void saveBroadcastNumber_shouldSaveNewObjectToDatabase() {
-        NewContactRequest broadcastNumber1 = NewContactRequest.builder()
+        ContactRequestDTO broadcastNumber1 = ContactRequestDTO.builder()
                                             .userName("NOC SBU")
                                             .contactNumber("081231231232")
                                             .build();
@@ -124,7 +124,7 @@ public class ContactServiceTest {
 
     @Test
     void saveRecipientNumber_shouldSaveNewObjectToDatabase() {
-        NewContactRequest recipientNumber = NewContactRequest.builder()
+        ContactRequestDTO recipientNumber = ContactRequestDTO.builder()
                                             .userName("NOC SBU")
                                             .contactNumber("081231231232")
                                             .build();

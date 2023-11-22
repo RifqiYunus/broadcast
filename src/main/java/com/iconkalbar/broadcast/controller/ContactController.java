@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.RecipientNumber;
-import com.iconkalbar.broadcast.model.request.NewContactRequest;
+import com.iconkalbar.broadcast.model.request.ContactRequestDTO;
 import com.iconkalbar.broadcast.service.ContactService;
 
 @RestController
@@ -34,12 +34,12 @@ public class ContactController {
     }
     
     @PostMapping("/senders")
-    ResponseEntity<NewContactRequest> postNewSenderContacts(@RequestBody NewContactRequest request) {
+    ResponseEntity<ContactRequestDTO> postNewSenderContacts(@RequestBody ContactRequestDTO request) {
         return new ResponseEntity<>(contactService.saveBroadcastNumber(request), HttpStatus.CREATED);
     }
 
     @PostMapping("/recipients")
-    ResponseEntity<NewContactRequest> postNewRecipientContacts(@RequestBody NewContactRequest request) {
+    ResponseEntity<ContactRequestDTO> postNewRecipientContacts(@RequestBody ContactRequestDTO request) {
         return new ResponseEntity<>(contactService.saveRecipientNumber(request), HttpStatus.CREATED);
     }
 

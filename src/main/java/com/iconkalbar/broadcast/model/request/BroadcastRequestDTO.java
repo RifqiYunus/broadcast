@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class BroadcastRequest {
+public class BroadcastRequestDTO {
     
     @JsonProperty("api_key")
     private String apiKey;

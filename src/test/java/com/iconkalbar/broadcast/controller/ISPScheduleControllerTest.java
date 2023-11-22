@@ -26,7 +26,7 @@ import com.iconkalbar.broadcast.factory.ModelFactory;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.RecipientNumber;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequestDTO;
 import com.iconkalbar.broadcast.repository.PmScheduleRepository;
 
 @SpringBootTest
@@ -76,7 +76,7 @@ public class ISPScheduleControllerTest {
         RecipientNumber recipientNumber = modelFactory.generateRecipientNumber();
         SitePOP sitePOP = modelFactory.generateSitePOP();
         String scheduledDate = "12-11-2023";
-        PmScheduleRequest newPmScheduleRequest = PmScheduleRequest.builder()
+        PmScheduleRequestDTO newPmScheduleRequest = PmScheduleRequestDTO.builder()
                                                     .popId(sitePOP.getPopId())
                                                     .recipientName(recipientNumber.getUserName())
                                                     .scheduledDate(scheduledDate)
@@ -96,7 +96,7 @@ public class ISPScheduleControllerTest {
         String scheduleDate = "08-11-2023";
         String realization = "10-11-2023";
         PmSchedule schedule = modelFactory.generatePmSchedule(false, PoP2Date, null);
-        PmScheduleRequest updatePmScheduleRequest = PmScheduleRequest.builder()
+        PmScheduleRequestDTO updatePmScheduleRequest = PmScheduleRequestDTO.builder()
                                                     .popId(schedule.getSitePop().getPopId())
                                                     .scheduledDate(scheduleDate)
                                                     .realizationDate(realization)

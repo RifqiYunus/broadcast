@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class PmScheduleRequest {
+public class PmScheduleRequestDTO {
 
     private int id;
     

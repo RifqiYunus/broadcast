@@ -24,7 +24,7 @@ import com.iconkalbar.broadcast.factory.ModelFactory;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.RecipientNumber;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequestDTO;
 
 @SpringBootTest
 public class PmScheduleServiceTest {
@@ -69,7 +69,7 @@ public class PmScheduleServiceTest {
         String realizationDateString = "10-11-2023";
         Date PoP1Date = sdformat.parse(PoP1DateString);
         PmSchedule schedule1 = modelFactory.generatePmSchedule(true, PoP1Date, null);
-        PmScheduleRequest request = PmScheduleRequest.builder()
+        PmScheduleRequestDTO request = PmScheduleRequestDTO.builder()
                                     .popId(schedule1.getSitePop().getPopId())
                                     .scheduledDate(PoP1DateString)
                                     .realizationDate(realizationDateString)
@@ -89,7 +89,7 @@ public class PmScheduleServiceTest {
         String realizationDateString = "10-11-2023";
         Date PoP1Date = sdformat.parse(PoP1DateString);
         modelFactory.generatePmSchedule(true, PoP1Date, null);
-        PmScheduleRequest request = PmScheduleRequest.builder()
+        PmScheduleRequestDTO request = PmScheduleRequestDTO.builder()
                                     .popId("Wrong POP Id")
                                     .scheduledDate(PoP1DateString)
                                     .realizationDate(realizationDateString)
@@ -107,7 +107,7 @@ public class PmScheduleServiceTest {
         String realizationDateString = "10-11-2023";
         Date PoP1Date = sdformat.parse(PoP1DateString);
         PmSchedule pmSchedule = modelFactory.generatePmSchedule(true, PoP1Date, null);
-        PmScheduleRequest request = PmScheduleRequest.builder()
+        PmScheduleRequestDTO request = PmScheduleRequestDTO.builder()
                                     .popId(pmSchedule.getSitePop().getPopId())
                                     .scheduledDate(wrongRequestDate)
                                     .realizationDate(realizationDateString)
@@ -123,14 +123,14 @@ public class PmScheduleServiceTest {
         RecipientNumber recipientNumber = modelFactory.generateRecipientNumber();
         SitePOP sitePOP = modelFactory.generateSitePOP();
         String scheduledDate = "12-11-2023";
-        PmScheduleRequest newPmScheduleRequest = PmScheduleRequest.builder()
+        PmScheduleRequestDTO newPmScheduleRequest = PmScheduleRequestDTO.builder()
                                                     .popId(sitePOP.getPopId())
                                                     .recipientName(recipientNumber.getUserName())
                                                     .scheduledDate(scheduledDate)
                                                     .build();
 
         ResponseEntity<String> responseEntity = pmScheduleService.addNewSchedule(newPmScheduleRequest);
-        PmScheduleRequest responseBody = objectMapper.readValue(responseEntity.getBody(), PmScheduleRequest.class);
+        PmScheduleRequestDTO responseBody = objectMapper.readValue(responseEntity.getBody(), PmScheduleRequestDTO.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertTrue(responseBody.getId()!=0);

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.RecipientNumber;
-import com.iconkalbar.broadcast.model.request.NewContactRequest;
+import com.iconkalbar.broadcast.model.request.ContactRequestDTO;
 import com.iconkalbar.broadcast.repository.BroadcastNumberRepository;
 import com.iconkalbar.broadcast.repository.RecipientNumberRepository;
 
@@ -87,7 +87,7 @@ public class ContactControllerTest {
     
     @Test
     void postNewBroadcastNumber_shouldSaveContacttoDatabase() throws Exception {
-        NewContactRequest newContactRequest = NewContactRequest.builder()
+        ContactRequestDTO newContactRequest = ContactRequestDTO.builder()
                                                 .userName("Engineer KP")
                                                 .contactNumber("08123232323")
                                                 .build();
@@ -101,7 +101,7 @@ public class ContactControllerTest {
 
     @Test
     void postNewRecipientNumber_shouldSaveContacttoDatabase() throws Exception {
-        NewContactRequest newContactRequest = NewContactRequest.builder()
+        ContactRequestDTO newContactRequest = ContactRequestDTO.builder()
                                                 .userName("Serpo Baru")
                                                 .contactNumber("08123232323")
                                                 .build();

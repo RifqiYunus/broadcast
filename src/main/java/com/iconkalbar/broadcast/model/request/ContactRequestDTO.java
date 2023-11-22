@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class NewContactRequest {
+public class ContactRequestDTO {
     
     private int id;
 

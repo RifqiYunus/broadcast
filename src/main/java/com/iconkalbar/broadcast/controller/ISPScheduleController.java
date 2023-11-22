@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequestDTO;
 import com.iconkalbar.broadcast.service.PmScheduleService;
 import com.iconkalbar.broadcast.service.SitePoPService;
 
@@ -36,12 +36,12 @@ public class ISPScheduleController {
     }
 
     @PostMapping("/schedules")
-    ResponseEntity<String> postNewSchedule(@RequestBody PmScheduleRequest request) throws JsonProcessingException, ParseException {
+    ResponseEntity<String> postNewSchedule(@RequestBody PmScheduleRequestDTO request) throws JsonProcessingException, ParseException {
         return pmScheduleService.addNewSchedule(request);
     }
 
     @PutMapping("/schedules")
-    ResponseEntity<String> updateRealizationDate(@RequestBody PmScheduleRequest request) throws JsonProcessingException, ParseException {
+    ResponseEntity<String> updateRealizationDate(@RequestBody PmScheduleRequestDTO request) throws JsonProcessingException, ParseException {
         return pmScheduleService.updateRealizationDate(request);
     }
 

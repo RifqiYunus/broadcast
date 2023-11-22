@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.RecipientNumber;
 import com.iconkalbar.broadcast.model.SitePOP;
-import com.iconkalbar.broadcast.model.request.PmScheduleRequest;
+import com.iconkalbar.broadcast.model.request.PmScheduleRequestDTO;
 import com.iconkalbar.broadcast.repository.PmScheduleRepository;
 
 @Service
@@ -49,7 +49,7 @@ public class PmScheduleService {
         return pmScheduleRepository.save(pmSchedule);
     }
 
-    public ResponseEntity<String> updateRealizationDate(PmScheduleRequest pmScheduleRequest) throws ParseException, JsonProcessingException {
+    public ResponseEntity<String> updateRealizationDate(PmScheduleRequestDTO pmScheduleRequest) throws ParseException, JsonProcessingException {
         SitePOP sitePOP;
         PmSchedule pmSchedule;
         
@@ -74,7 +74,7 @@ public class PmScheduleService {
         return new ResponseEntity<>(objectMapper.writeValueAsString(updatedSchedule), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> addNewSchedule(PmScheduleRequest newPmScheduleRequest) throws ParseException, JsonProcessingException {
+    public ResponseEntity<String> addNewSchedule(PmScheduleRequestDTO newPmScheduleRequest) throws ParseException, JsonProcessingException {
         SitePOP sitePOP;
         RecipientNumber recipientNumber;
         

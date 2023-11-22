@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.RecipientNumber;
-import com.iconkalbar.broadcast.model.request.NewContactRequest;
+import com.iconkalbar.broadcast.model.request.ContactRequestDTO;
 import com.iconkalbar.broadcast.repository.BroadcastNumberRepository;
 import com.iconkalbar.broadcast.repository.RecipientNumberRepository;
 
@@ -37,21 +37,21 @@ public class ContactService {
         return recipientNumberRepository.findByUserName(name);
     }
 
-    public NewContactRequest saveBroadcastNumber(NewContactRequest contactRequest) {
+    public ContactRequestDTO saveBroadcastNumber(ContactRequestDTO contactRequest) {
         BroadcastNumber broadcastNumber = BroadcastNumber.builder()
                                             .userName(contactRequest.getUserName())
                                             .waNumber(contactRequest.getContactNumber())
                                             .build();
         BroadcastNumber savedNumber = broadcastNumberRepository.save(broadcastNumber);
-        return new NewContactRequest(savedNumber.getId() ,savedNumber.getUserName(), savedNumber.getWaNumber(), "Sender");
+        return new ContactRequestDTO(savedNumber.getId() ,savedNumber.getUserName(), savedNumber.getWaNumber(), "Sender");
     }
 
-    public NewContactRequest saveRecipientNumber(NewContactRequest contactRequest) {
+    public ContactRequestDTO saveRecipientNumber(ContactRequestDTO contactRequest) {
         RecipientNumber recipientNumber = RecipientNumber.builder()
                                             .userName(contactRequest.getUserName())
                                             .waNumber(contactRequest.getContactNumber())
                                             .build();
         RecipientNumber savedNumber = recipientNumberRepository.save(recipientNumber);
-        return new NewContactRequest(savedNumber.getId() ,savedNumber.getUserName(), savedNumber.getWaNumber(), "Recipient");
+        return new ContactRequestDTO(savedNumber.getId() ,savedNumber.getUserName(), savedNumber.getWaNumber(), "Recipient");
     }
 }
