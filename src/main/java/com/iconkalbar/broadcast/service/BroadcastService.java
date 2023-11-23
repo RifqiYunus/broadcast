@@ -1,11 +1,16 @@
 package com.iconkalbar.broadcast.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -19,10 +24,11 @@ import com.iconkalbar.broadcast.model.request.BroadcastRequestDTO;
 @Service
 public class BroadcastService {
 
-    public BroadcastService(RestTemplate restTemplate, ObjectMapper objectMapper, PmScheduleService pmScheduleService) {
+    public BroadcastService(RestTemplate restTemplate, ObjectMapper objectMapper, PmScheduleService pmScheduleService, ContactService contactService) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
         this.pmScheduleService = pmScheduleService;
+        this.contactService = contactService;
     }
 
     private RestTemplate restTemplate;
@@ -30,6 +36,8 @@ public class BroadcastService {
     private ObjectMapper objectMapper;
 
     private PmScheduleService pmScheduleService;
+
+    private ContactService contactService;
 
     SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.dateFormat);
 
@@ -48,6 +56,23 @@ public class BroadcastService {
             pmScheduleService.saveOrUpdatePmSchedule(pmSchedule);
         }
         return bResponseEntity;
+    }
+
+    @Scheduled
+    public void scheduledBroadcast() throws ParseException, RestClientException, JsonProcessingException {
+        String dateToday = sdFormat.format(new Date());
+        List<PmSchedule> broadcastList = pmScheduleService.fetchAllScheduleThisWeek(dateToday);
+        List<BroadcastNumber> broadcastNumbers = contactService.getBySenderName("Engineer KP");
+        
+        if(broadcastList.isEmpty() || broadcastNumbers.isEmpty()){
+            return;
+        }
+
+        for (PmSchedule pmSchedule : broadcastList) {
+            this.blastMessage(pmSchedule, broadcastNumbers.get(0));
+        }
+
+        return;
     }
     
 }
