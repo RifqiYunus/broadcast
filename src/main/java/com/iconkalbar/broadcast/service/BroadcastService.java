@@ -58,7 +58,7 @@ public class BroadcastService {
         return bResponseEntity;
     }
 
-    @Scheduled
+    @Scheduled(cron = "0 0 8 ? * MON *")
     public void scheduledBroadcast() throws ParseException, RestClientException, JsonProcessingException {
         String dateToday = sdFormat.format(new Date());
         List<PmSchedule> broadcastList = pmScheduleService.fetchAllScheduleThisWeek(dateToday);
