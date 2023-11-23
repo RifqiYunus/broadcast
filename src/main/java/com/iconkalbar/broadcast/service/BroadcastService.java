@@ -1,5 +1,10 @@
 package com.iconkalbar.broadcast.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +35,8 @@ public class BroadcastService {
 
     private PmScheduleService pmScheduleService;
 
+    SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.dateFormat);
+
     public ResponseEntity<String> blastMessage(PmSchedule pmSchedule, BroadcastNumber broadcastNumber) throws RestClientException, JsonProcessingException {
         BroadcastRequestDTO broadcastRequest = BroadcastRequestDTO.builder()
                                             .apiKey(Constants.API_KEY)
@@ -46,4 +53,5 @@ public class BroadcastService {
         }
         return bResponseEntity;
     }
+    
 }
