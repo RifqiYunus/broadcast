@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,8 @@ public class PmScheduleService {
 
     private SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.dateFormat);
 
+    Logger logger = LoggerFactory.getLogger(PmScheduleService.class);
+
     public List<PmSchedule> fetchAllScheduleThisWeek(String dateString) throws ParseException {
         Date scheduleDate = sdFormat.parse(dateString);
         Calendar cal = Calendar.getInstance();
@@ -56,12 +60,14 @@ public class PmScheduleService {
         try {
             sitePOP = sitePoPService.fetchByPopId(pmScheduleRequest.getPopId()).get(0);
         } catch (Exception e) {
+            logger.error("POP with ID " + pmScheduleRequest.getPopId() + " not found", e);
             return new ResponseEntity<>("POP with ID " + pmScheduleRequest.getPopId() + " not found", HttpStatus.NOT_FOUND);
         }
         
         try {
             pmSchedule = pmScheduleRepository.findBySitePopAndScheduledDate(sitePOP, sdFormat.parse(pmScheduleRequest.getScheduledDate())).get(0);
         } catch (Exception e) {
+            logger.error("Schedule not found", e);
             return new ResponseEntity<>("Schedule not found", HttpStatus.NOT_FOUND);
         }
         
@@ -81,12 +87,14 @@ public class PmScheduleService {
         try {
             sitePOP = sitePoPService.fetchByPopId(newPmScheduleRequest.getPopId()).get(0);
         } catch (Exception e) {
+            logger.error("POP with ID " + newPmScheduleRequest.getPopId() + " not found", e);
             return new ResponseEntity<>("POP with ID " + newPmScheduleRequest.getPopId() + " not found", HttpStatus.NOT_FOUND);
         }
 
         try {
             recipientNumber = contactService.getByRecipientName(newPmScheduleRequest.getRecipientName()).get(0);
         } catch (Exception e) {
+            logger.error("No recipient contact by name of " + newPmScheduleRequest.getRecipientName(), e);
             return new ResponseEntity<>("No recipient contact by name of " + newPmScheduleRequest.getRecipientName(), HttpStatus.NOT_FOUND);
         }
 

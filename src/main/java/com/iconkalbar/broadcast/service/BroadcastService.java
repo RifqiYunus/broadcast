@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,11 @@ import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.PmSchedule;
 import com.iconkalbar.broadcast.model.request.BroadcastRequestDTO;
 
+
 @Service
 public class BroadcastService {
+
+    Logger logger = LoggerFactory.getLogger(BroadcastService.class);
 
     public BroadcastService(RestTemplate restTemplate, ObjectMapper objectMapper, PmScheduleService pmScheduleService, ContactService contactService) {
         this.restTemplate = restTemplate;
@@ -51,10 +56,12 @@ public class BroadcastService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> requestEntity = new HttpEntity<String>(objectMapper.writeValueAsString(broadcastRequest), headers);
         ResponseEntity<String> bResponseEntity = restTemplate.postForEntity(Constants.BLAST_URI, requestEntity, String.class);
-        if(bResponseEntity.getStatusCode()==HttpStatus.OK){
-            pmSchedule.setReminderSentTimes(pmSchedule.getReminderSentTimes() + 1);
-            pmScheduleService.saveOrUpdatePmSchedule(pmSchedule);
+        if(bResponseEntity.getStatusCode()!=HttpStatus.OK){
+            return bResponseEntity;
         }
+        logger.info("Broadcast to " + pmSchedule.getRecipient().getUserName() + " sent successfully");
+        pmSchedule.setReminderSentTimes(pmSchedule.getReminderSentTimes() + 1);
+        pmScheduleService.saveOrUpdatePmSchedule(pmSchedule);
         return bResponseEntity;
     }
 
@@ -66,8 +73,11 @@ public class BroadcastService {
         List<BroadcastNumber> broadcastNumbers = contactService.getBySenderName("Engineer KP");
         
         if(broadcastList.isEmpty() || broadcastNumbers.isEmpty()){
+            logger.warn("sender contact or schedule empty");
             return;
         }
+
+        logger.info(broadcastList.size() + " reminder to be broadcasted");
 
         for (PmSchedule pmSchedule : broadcastList) {
             this.blastMessage(pmSchedule, broadcastNumbers.get(0));
