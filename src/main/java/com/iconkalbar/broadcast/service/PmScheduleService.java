@@ -36,7 +36,7 @@ public class PmScheduleService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.dateFormat);
+    private SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 
     Logger logger = LoggerFactory.getLogger(PmScheduleService.class);
 

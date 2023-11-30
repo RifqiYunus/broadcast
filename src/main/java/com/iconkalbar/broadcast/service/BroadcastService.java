@@ -21,6 +21,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iconkalbar.broadcast.model.BroadcastNumber;
 import com.iconkalbar.broadcast.model.PmSchedule;
+import com.iconkalbar.broadcast.model.RecipientNumber;
+import com.iconkalbar.broadcast.model.SitePOP;
 import com.iconkalbar.broadcast.model.request.BroadcastRequestDTO;
 
 
@@ -44,14 +46,18 @@ public class BroadcastService {
 
     private ContactService contactService;
 
-    SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.dateFormat);
+    SimpleDateFormat sdFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 
     public ResponseEntity<String> blastMessage(PmSchedule pmSchedule, BroadcastNumber broadcastNumber) throws RestClientException, JsonProcessingException {
+        RecipientNumber recipient = pmSchedule.getRecipient();
+        SitePOP sitePOP = pmSchedule.getSitePop();
+        
+        String message = String.format(Constants.MESSAGE_TEMPLATE, recipient.getUserName(), sitePOP.getName(), pmSchedule.getScheduledDate());
         BroadcastRequestDTO broadcastRequest = BroadcastRequestDTO.builder()
                                             .apiKey(Constants.API_KEY)
                                             .sender(broadcastNumber.getWaNumber())
-                                            .number(pmSchedule.getRecipient().getWaNumber())
-                                            .message("Hello World").build();
+                                            .number(recipient.getWaNumber())
+                                            .message(message).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> requestEntity = new HttpEntity<String>(objectMapper.writeValueAsString(broadcastRequest), headers);
@@ -59,7 +65,7 @@ public class BroadcastService {
         if(bResponseEntity.getStatusCode()!=HttpStatus.OK){
             return bResponseEntity;
         }
-        logger.info("Broadcast to " + pmSchedule.getRecipient().getUserName() + " sent successfully");
+        logger.info("Broadcast to " + recipient.getUserName() + " sent successfully");
         pmSchedule.setReminderSentTimes(pmSchedule.getReminderSentTimes() + 1);
         pmScheduleService.saveOrUpdatePmSchedule(pmSchedule);
         return bResponseEntity;
