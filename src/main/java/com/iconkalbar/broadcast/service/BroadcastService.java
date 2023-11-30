@@ -52,7 +52,7 @@ public class BroadcastService {
         RecipientNumber recipient = pmSchedule.getRecipient();
         SitePOP sitePOP = pmSchedule.getSitePop();
         
-        String message = String.format(Constants.MESSAGE_TEMPLATE, recipient.getUserName(), sitePOP.getName(), pmSchedule.getScheduledDate());
+        String message = String.format(Constants.MESSAGE_TEMPLATE, recipient.getUserName(), sitePOP.getName(), sdFormat.format(pmSchedule.getScheduledDate()));
         BroadcastRequestDTO broadcastRequest = BroadcastRequestDTO.builder()
                                             .apiKey(Constants.API_KEY)
                                             .sender(broadcastNumber.getWaNumber())
